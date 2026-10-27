@@ -5,7 +5,7 @@ Author: Dilni Premawardana. Date: 27 October 2026.
 
 An interactive visual story about packaged food and drink in Australia, in four parts:
 the shop (prices), the shelf (products), the label (nutrients) and the plate (diet).
-Built with Vega-Lite (and one Vega treemap). No build step is needed.
+Built with Vega-Lite (and one Vega treemap).
 
 ## Map idioms
 
@@ -52,8 +52,6 @@ Built with Vega-Lite (and one Vega treemap). No build step is needed.
 | `nhs_states.csv` | ABS National Health Survey 2022, Table 2.3 (age-standardised proportions) | Share of adults who did not meet the daily fruit and vegetable recommendation. Tile positions and label positions added for drawing. |
 | `cpi_food_cities.csv` | ABS Consumer Price Index, Australia (monthly), food and non-alcoholic beverages by capital city | 12-month change, August 2026 vs August 2025. City coordinates and label positions added for drawing. |
 
-"High" levels in chart 4 are the UK traffic-light thresholds per 100 g (sugar over 22.5 g,
-saturated fat over 5 g, salt over 1.5 g), from Food Standards Scotland guidance. They are not Australian rules.
 
 ## AI acknowledgement
 
