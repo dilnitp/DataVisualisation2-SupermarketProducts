@@ -1,0 +1,291 @@
+{
+  "$schema": "https://vega.github.io/schema/vega/v6.json",
+  "description": "Treemap: number of products per food group (size) and share scoring D or E on Nutri-Score (colour). Source: Open Food Facts, Australian products.",
+  "title": {
+    "text": "Sweet snacks fill the biggest aisle, and most score poorly",
+    "subtitle": "Tile size = number of products. Colour = share scoring D or E on Nutri-Score.",
+    "anchor": "start",
+    "fontSize": 16,
+    "fontWeight": 700,
+    "color": "#1f2937",
+    "subtitleColor": "#4b5563",
+    "subtitleFontSize": 13,
+    "offset": 14
+  },
+  "width": 620,
+  "height": 380,
+  "padding": 4,
+  "autosize": "pad",
+  "config": {
+    "font": "'DM Sans', system-ui, sans-serif",
+    "background": null,
+    "view": {
+      "stroke": null
+    },
+    "axis": {
+      "labelLimit": 260,
+      "labelFontSize": 12,
+      "titleFontSize": 13,
+      "titleFontWeight": 600,
+      "labelColor": "#4b5563",
+      "titleColor": "#1f2937",
+      "domainColor": "#9ca3af",
+      "tickColor": "#9ca3af",
+      "gridColor": "#e5e7eb",
+      "titlePadding": 10
+    },
+    "legend": {
+      "labelFontSize": 12,
+      "titleFontSize": 12,
+      "titleFontWeight": 600,
+      "labelColor": "#4b5563",
+      "titleColor": "#1f2937"
+    },
+    "title": {
+      "fontSize": 16,
+      "fontWeight": 700,
+      "anchor": "start",
+      "color": "#1f2937",
+      "subtitleColor": "#4b5563",
+      "subtitleFontSize": 13,
+      "subtitlePadding": 6,
+      "offset": 14
+    },
+    "header": {
+      "labelFontSize": 12,
+      "labelColor": "#1f2937"
+    }
+  },
+  "data": [
+    {
+      "name": "tree",
+      "url": "data/treemap.csv",
+      "format": {
+        "type": "csv",
+        "parse": {
+          "count": "number",
+          "scored": "number",
+          "poor": "number",
+          "poor_share": "number"
+        }
+      },
+      "transform": [
+        {
+          "type": "stratify",
+          "key": "id",
+          "parentKey": "parent"
+        },
+        {
+          "type": "treemap",
+          "field": "count",
+          "sort": {
+            "field": "value",
+            "order": "descending"
+          },
+          "round": true,
+          "method": "squarify",
+          "paddingInner": 3,
+          "size": [
+            {
+              "signal": "width"
+            },
+            {
+              "signal": "height"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "leaves",
+      "source": "tree",
+      "transform": [
+        {
+          "type": "filter",
+          "expr": "!datum.children"
+        }
+      ]
+    }
+  ],
+  "scales": [
+    {
+      "name": "color",
+      "type": "linear",
+      "domain": [
+        15,
+        90
+      ],
+      "range": [
+        "#fed7aa",
+        "#7c2d12"
+      ],
+      "clamp": true
+    }
+  ],
+  "legends": [
+    {
+      "fill": "color",
+      "type": "gradient",
+      "title": "Score D or E (%)",
+      "orient": "bottom",
+      "direction": "horizontal",
+      "gradientLength": 260,
+      "gradientThickness": 12,
+      "format": "d",
+      "values": [
+        20,
+        40,
+        60,
+        80
+      ],
+      "titleFontSize": 12,
+      "labelFontSize": 12,
+      "titleLimit": 200
+    }
+  ],
+  "marks": [
+    {
+      "type": "rect",
+      "from": {
+        "data": "leaves"
+      },
+      "encode": {
+        "update": {
+          "x": {
+            "field": "x0"
+          },
+          "y": {
+            "field": "y0"
+          },
+          "x2": {
+            "field": "x1"
+          },
+          "y2": {
+            "field": "y1"
+          },
+          "fill": {
+            "scale": "color",
+            "field": "poor_share"
+          },
+          "tooltip": {
+            "signal": "{'Group': datum.id, 'Products': format(datum.count, ','), 'Scoring D or E': datum.poor_share + '%'}"
+          }
+        }
+      }
+    },
+    {
+      "type": "text",
+      "from": {
+        "data": "leaves"
+      },
+      "encode": {
+        "update": {
+          "x": {
+            "signal": "datum.x0 + 8"
+          },
+          "y": {
+            "signal": "datum.y0 + 8"
+          },
+          "baseline": {
+            "value": "top"
+          },
+          "text": {
+            "signal": "(datum.x1 - datum.x0) < 125 ? replace(datum.id, /\\s+/g, '\\n') : datum.id"
+          },
+          "lineBreak": {
+            "value": "\n"
+          },
+          "lineHeight": {
+            "value": 14
+          },
+          "fontSize": {
+            "signal": "(datum.x1 - datum.x0) < 130 ? 11 : 13"
+          },
+          "fontWeight": {
+            "value": "bold"
+          },
+          "fill": {
+            "signal": "datum.poor_share > 55 ? '#ffffff' : '#1f2937'"
+          },
+          "limit": {
+            "signal": "datum.x1 - datum.x0 - 12"
+          },
+          "opacity": {
+            "signal": "(datum.x1 - datum.x0) > 70 && (datum.y1 - datum.y0) > 30 ? 1 : 0"
+          }
+        }
+      }
+    },
+    {
+      "type": "text",
+      "from": {
+        "data": "leaves"
+      },
+      "encode": {
+        "update": {
+          "x": {
+            "signal": "datum.x0 + 8"
+          },
+          "y": {
+            "signal": "datum.y0 + 26"
+          },
+          "baseline": {
+            "value": "top"
+          },
+          "text": {
+            "signal": "format(datum.count, ',') + ' products'"
+          },
+          "fontSize": {
+            "value": 12
+          },
+          "fill": {
+            "signal": "datum.poor_share > 55 ? '#ffffff' : '#374151'"
+          },
+          "limit": {
+            "signal": "datum.x1 - datum.x0 - 12"
+          },
+          "opacity": {
+            "signal": "(datum.x1 - datum.x0) > 125 && (datum.y1 - datum.y0) > 58 ? 1 : 0"
+          }
+        }
+      }
+    },
+    {
+      "type": "text",
+      "from": {
+        "data": "leaves"
+      },
+      "encode": {
+        "update": {
+          "x": {
+            "signal": "datum.x0 + 8"
+          },
+          "y": {
+            "signal": "datum.y0 + 42"
+          },
+          "baseline": {
+            "value": "top"
+          },
+          "text": {
+            "signal": "datum.poor_share + '% score D or E'"
+          },
+          "fontSize": {
+            "value": 12
+          },
+          "fontWeight": {
+            "value": "bold"
+          },
+          "fill": {
+            "signal": "datum.poor_share > 55 ? '#ffffff' : '#9a3412'"
+          },
+          "limit": {
+            "signal": "datum.x1 - datum.x0 - 12"
+          },
+          "opacity": {
+            "signal": "(datum.x1 - datum.x0) > 125 && (datum.y1 - datum.y0) > 58 ? 1 : 0"
+          }
+        }
+      }
+    }
+  ]
+}

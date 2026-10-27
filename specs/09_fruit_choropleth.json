@@ -1,0 +1,253 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
+  "description": "Choropleth: share of adults who did not eat the recommended daily fruit, by state and territory, adjusted for age. Source: ABS National Health Survey 2022.",
+  "title": {
+    "text": "Most adults miss the daily fruit target",
+    "subtitle": "Share of adults not eating enough fruit each day, 2022 (adjusted for age)"
+  },
+  "width": "container",
+  "height": 440,
+  "autosize": {
+    "type": "fit",
+    "contains": "padding"
+  },
+  "projection": {
+    "type": "conicEqualArea",
+    "parallels": [
+      -18,
+      -36
+    ],
+    "rotate": [
+      -132,
+      0
+    ]
+  },
+  "layer": [
+    {
+      "data": {
+        "url": "data/states.json",
+        "format": {
+          "type": "topojson",
+          "feature": "states"
+        }
+      },
+      "transform": [
+        {
+          "lookup": "properties.STE_NAME21",
+          "from": {
+            "data": {
+              "url": "data/nhs_states.csv",
+              "format": {
+                "type": "csv",
+                "parse": {
+                  "fruit_not_met_age_adj": "number",
+                  "veg_not_met_age_adj": "number",
+                  "label_lon": "number",
+                  "label_lat": "number"
+                }
+              }
+            },
+            "key": "state",
+            "fields": [
+              "abbr",
+              "fruit_not_met_age_adj",
+              "veg_not_met_age_adj"
+            ]
+          }
+        }
+      ],
+      "mark": {
+        "type": "geoshape",
+        "stroke": "#ffffff",
+        "strokeWidth": 1.5
+      },
+      "encoding": {
+        "color": {
+          "field": "fruit_not_met_age_adj",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              55,
+              61
+            ],
+            "range": [
+              "#fed7aa",
+              "#9a3412"
+            ]
+          },
+          "legend": {
+            "title": "Not enough fruit (%)",
+            "titleLimit": 220,
+            "orient": "bottom-left",
+            "gradientLength": 160,
+            "format": "d",
+            "values": [
+              55,
+              57,
+              59,
+              61
+            ]
+          }
+        },
+        "tooltip": [
+          {
+            "field": "properties.STE_NAME21",
+            "title": "State"
+          },
+          {
+            "field": "fruit_not_met_age_adj",
+            "title": "Not enough fruit (%)",
+            "format": ".1f"
+          }
+        ]
+      }
+    },
+    {
+      "data": {
+        "url": "data/nhs_states.csv",
+        "format": {
+          "type": "csv",
+          "parse": {
+            "fruit_not_met_age_adj": "number",
+            "label_lon": "number",
+            "label_lat": "number"
+          }
+        }
+      },
+      "transform": [
+        {
+          "filter": "isValid(datum.label_lon)"
+        },
+        {
+          "calculate": "[datum.abbr, round(datum.fruit_not_met_age_adj) + '%']",
+          "as": "label"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "fontSize": 12,
+        "fontWeight": 700,
+        "lineBreak": null
+      },
+      "encoding": {
+        "longitude": {
+          "field": "label_lon",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "label_lat",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "label",
+          "type": "nominal"
+        },
+        "color": {
+          "condition": {
+            "test": "datum.fruit_not_met_age_adj > 58.3 && datum.abbr != 'ACT' && datum.abbr != 'TAS'",
+            "value": "#ffffff"
+          },
+          "value": "#1f2937"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "t": "Tasmania is highest: 60%"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "baseline": "top",
+        "fontSize": 13,
+        "fontWeight": 700,
+        "color": "#c2410c"
+      },
+      "encoding": {
+        "x": {
+          "value": 0
+        },
+        "y": {
+          "value": 6
+        },
+        "text": {
+          "field": "t",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "t": "Victoria is lowest: 55%"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "baseline": "top",
+        "fontSize": 13,
+        "fontWeight": 700,
+        "color": "#c2410c"
+      },
+      "encoding": {
+        "x": {
+          "value": 0
+        },
+        "y": {
+          "value": 26
+        },
+        "text": {
+          "field": "t",
+          "type": "nominal"
+        }
+      }
+    }
+  ],
+  "config": {
+    "font": "'DM Sans', system-ui, sans-serif",
+    "background": null,
+    "view": {
+      "stroke": null
+    },
+    "axis": {
+      "labelLimit": 260,
+      "labelFontSize": 12,
+      "titleFontSize": 13,
+      "titleFontWeight": 600,
+      "labelColor": "#4b5563",
+      "titleColor": "#1f2937",
+      "domainColor": "#9ca3af",
+      "tickColor": "#9ca3af",
+      "gridColor": "#e5e7eb",
+      "titlePadding": 10
+    },
+    "legend": {
+      "labelFontSize": 12,
+      "titleFontSize": 12,
+      "titleFontWeight": 600,
+      "labelColor": "#4b5563",
+      "titleColor": "#1f2937"
+    },
+    "title": {
+      "fontSize": 16,
+      "fontWeight": 700,
+      "anchor": "start",
+      "color": "#1f2937",
+      "subtitleColor": "#4b5563",
+      "subtitleFontSize": 13,
+      "subtitlePadding": 6,
+      "offset": 14
+    },
+    "header": {
+      "labelFontSize": 12,
+      "labelColor": "#1f2937"
+    }
+  }
+}

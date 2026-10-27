@@ -1,0 +1,113 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
+  "description": "Waffle chart: each square is 1 in 100 products that have a processing score. Source: Open Food Facts (NOVA group).",
+  "title": {
+    "text": "63 in every 100 scored products are ultra-processed",
+    "subtitle": "Each square = 1 in 100 products with a processing score"
+  },
+  "data": {
+    "url": "data/nova_waffle.csv"
+  },
+  "width": 280,
+  "height": 280,
+  "mark": {
+    "type": "rect",
+    "stroke": "#ffffff",
+    "strokeWidth": 1
+  },
+  "encoding": {
+    "x": {
+      "field": "col",
+      "type": "ordinal",
+      "axis": null,
+      "scale": {
+        "paddingInner": 0.1
+      }
+    },
+    "y": {
+      "field": "row",
+      "type": "ordinal",
+      "axis": null,
+      "scale": {
+        "paddingInner": 0.1
+      }
+    },
+    "color": {
+      "field": "group",
+      "type": "nominal",
+      "sort": [
+        "Minimally processed",
+        "Processed ingredients",
+        "Processed foods",
+        "Ultra-processed"
+      ],
+      "scale": {
+        "domain": [
+          "Minimally processed",
+          "Processed ingredients",
+          "Processed foods",
+          "Ultra-processed"
+        ],
+        "range": [
+          "#cbd5e1",
+          "#94a3b8",
+          "#64748b",
+          "#c2410c"
+        ]
+      },
+      "legend": {
+        "title": "Processing level",
+        "orient": "right",
+        "labelLimit": 230,
+        "symbolType": "square",
+        "symbolSize": 140
+      }
+    },
+    "tooltip": [
+      {
+        "field": "group",
+        "title": "Processing level"
+      }
+    ]
+  },
+  "config": {
+    "font": "'DM Sans', system-ui, sans-serif",
+    "background": null,
+    "view": {
+      "stroke": null
+    },
+    "axis": {
+      "labelLimit": 260,
+      "labelFontSize": 12,
+      "titleFontSize": 13,
+      "titleFontWeight": 600,
+      "labelColor": "#4b5563",
+      "titleColor": "#1f2937",
+      "domainColor": "#9ca3af",
+      "tickColor": "#9ca3af",
+      "gridColor": "#e5e7eb",
+      "titlePadding": 10
+    },
+    "legend": {
+      "labelFontSize": 12,
+      "titleFontSize": 12,
+      "titleFontWeight": 600,
+      "labelColor": "#4b5563",
+      "titleColor": "#1f2937"
+    },
+    "title": {
+      "fontSize": 16,
+      "fontWeight": 700,
+      "anchor": "start",
+      "color": "#1f2937",
+      "subtitleColor": "#4b5563",
+      "subtitleFontSize": 13,
+      "subtitlePadding": 6,
+      "offset": 14
+    },
+    "header": {
+      "labelFontSize": 12,
+      "labelColor": "#1f2937"
+    }
+  }
+}

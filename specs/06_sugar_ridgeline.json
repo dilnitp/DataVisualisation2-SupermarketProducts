@@ -1,0 +1,190 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
+  "description": "Ridgeline plot: spread of sugar per 100 g within each food group (density, scaled within each group). Source: Open Food Facts.",
+  "title": {
+    "text": "Sweet snacks reach far into high-sugar territory",
+    "subtitle": "Each ridge shows how products in a group spread across sugar levels"
+  },
+  "data": {
+    "url": "data/products.csv",
+    "format": {
+      "type": "csv",
+      "parse": {
+        "sugar": "number",
+        "salt": "number",
+        "satfat": "number",
+        "fibre": "number",
+        "protein": "number"
+      }
+    }
+  },
+  "transform": [
+    {
+      "filter": "isValid(datum.sugar) && datum.sugar <= 60"
+    },
+    {
+      "density": "sugar",
+      "groupby": [
+        "category"
+      ],
+      "extent": [
+        0,
+        60
+      ],
+      "steps": 60,
+      "as": [
+        "sugar_level",
+        "density"
+      ]
+    }
+  ],
+  "facet": {
+    "row": {
+      "field": "category",
+      "type": "nominal",
+      "title": null,
+      "sort": [
+        "Sweet snacks",
+        "Fruit and veg",
+        "Milk and dairy",
+        "Oils and sauces",
+        "Drinks",
+        "Salty snacks",
+        "Cereals and potatoes",
+        "Ready meals",
+        "Meat, fish, eggs"
+      ],
+      "header": {
+        "labels": false
+      }
+    }
+  },
+  "spec": {
+    "width": 560,
+    "height": 44,
+    "layer": [
+      {
+        "mark": {
+          "type": "area",
+          "interpolate": "monotone",
+          "fillOpacity": 0.95,
+          "stroke": "#ffffff",
+          "strokeWidth": 1.2
+        },
+        "encoding": {
+          "x": {
+            "field": "sugar_level",
+            "type": "quantitative",
+            "title": "Sugar (grams per 100 g)",
+            "scale": {
+              "domain": [
+                0,
+                60
+              ]
+            }
+          },
+          "y": {
+            "field": "density",
+            "type": "quantitative",
+            "scale": {
+              "range": [
+                44,
+                -14
+              ]
+            },
+            "axis": null
+          },
+          "fill": {
+            "condition": {
+              "test": "datum.category == 'Sweet snacks'",
+              "value": "#c2410c"
+            },
+            "value": "#94a3b8"
+          }
+        }
+      },
+      {
+        "transform": [
+          {
+            "filter": "datum.sugar_level == 0"
+          }
+        ],
+        "mark": {
+          "type": "text",
+          "align": "right",
+          "baseline": "top",
+          "dx": 0,
+          "fontSize": 13,
+          "fontWeight": 700
+        },
+        "encoding": {
+          "x": {
+            "value": 556
+          },
+          "y": {
+            "value": 4
+          },
+          "text": {
+            "field": "category",
+            "type": "nominal"
+          },
+          "color": {
+            "condition": {
+              "test": "datum.category == 'Sweet snacks'",
+              "value": "#ffffff"
+            },
+            "value": "#1f2937"
+          }
+        }
+      }
+    ]
+  },
+  "resolve": {
+    "scale": {
+      "y": "independent"
+    },
+    "axis": {
+      "x": "shared"
+    }
+  },
+  "config": {
+    "font": "'DM Sans', system-ui, sans-serif",
+    "background": null,
+    "view": {
+      "stroke": null
+    },
+    "axis": {
+      "labelLimit": 260,
+      "labelFontSize": 12,
+      "titleFontSize": 13,
+      "titleFontWeight": 600,
+      "labelColor": "#4b5563",
+      "titleColor": "#1f2937",
+      "domainColor": "#9ca3af",
+      "tickColor": "#9ca3af",
+      "gridColor": "#e5e7eb",
+      "titlePadding": 10
+    },
+    "legend": {
+      "labelFontSize": 12,
+      "titleFontSize": 12,
+      "titleFontWeight": 600,
+      "labelColor": "#4b5563",
+      "titleColor": "#1f2937"
+    },
+    "title": {
+      "fontSize": 16,
+      "fontWeight": 700,
+      "anchor": "start",
+      "color": "#1f2937",
+      "subtitleColor": "#4b5563",
+      "subtitleFontSize": 13,
+      "subtitlePadding": 6,
+      "offset": 14
+    },
+    "header": {
+      "labelFontSize": 12,
+      "labelColor": "#1f2937"
+    }
+  }
+}

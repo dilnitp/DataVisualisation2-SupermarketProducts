@@ -1,0 +1,558 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
+  "description": "Connection map: countries where products listed in Australia are also listed as sold. Line width and circle size show the number of products. Source: Open Food Facts.",
+  "title": {
+    "text": "Many products sell overseas too",
+    "subtitle": "Products listed in Australia and in another country"
+  },
+  "width": "container",
+  "height": 340,
+  "autosize": {
+    "type": "fit",
+    "contains": "padding"
+  },
+  "projection": {
+    "type": "equalEarth",
+    "rotate": [
+      -150,
+      0,
+      0
+    ]
+  },
+  "layer": [
+    {
+      "data": {
+        "url": "data/world.json",
+        "format": {
+          "type": "topojson",
+          "feature": "countries"
+        }
+      },
+      "mark": {
+        "type": "geoshape",
+        "fill": "#e5e7eb",
+        "stroke": "#ffffff",
+        "strokeWidth": 0.5
+      }
+    },
+    {
+      "data": {
+        "url": "data/world.json",
+        "format": {
+          "type": "topojson",
+          "feature": "countries"
+        }
+      },
+      "transform": [
+        {
+          "filter": "datum.properties.name == 'Australia'"
+        }
+      ],
+      "mark": {
+        "type": "geoshape",
+        "fill": "#fdba74",
+        "stroke": "#ffffff",
+        "strokeWidth": 0.5
+      }
+    },
+    {
+      "data": {
+        "url": "data/shared_countries.csv",
+        "format": {
+          "type": "csv",
+          "parse": {
+            "products": "number",
+            "lat": "number",
+            "lon": "number",
+            "label_lon": "number",
+            "label_lat": "number",
+            "aus_lat": "number",
+            "aus_lon": "number"
+          }
+        }
+      },
+      "mark": {
+        "type": "rule",
+        "color": "#c2410c",
+        "opacity": 0.5
+      },
+      "encoding": {
+        "longitude": {
+          "field": "aus_lon",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "aus_lat",
+          "type": "quantitative"
+        },
+        "longitude2": {
+          "field": "lon"
+        },
+        "latitude2": {
+          "field": "lat"
+        },
+        "strokeWidth": {
+          "field": "products",
+          "type": "quantitative",
+          "scale": {
+            "type": "sqrt",
+            "domain": [
+              0,
+              2300
+            ],
+            "range": [
+              1,
+              9
+            ]
+          },
+          "legend": null
+        }
+      }
+    },
+    {
+      "data": {
+        "url": "data/shared_countries.csv",
+        "format": {
+          "type": "csv",
+          "parse": {
+            "products": "number",
+            "lat": "number",
+            "lon": "number",
+            "label_lon": "number",
+            "label_lat": "number",
+            "aus_lat": "number",
+            "aus_lon": "number"
+          }
+        }
+      },
+      "mark": {
+        "type": "circle",
+        "color": "#c2410c",
+        "opacity": 0.95,
+        "stroke": "#ffffff",
+        "strokeWidth": 1.5
+      },
+      "encoding": {
+        "longitude": {
+          "field": "lon",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "lat",
+          "type": "quantitative"
+        },
+        "size": {
+          "field": "products",
+          "type": "quantitative",
+          "scale": {
+            "type": "sqrt",
+            "domain": [
+              0,
+              2300
+            ],
+            "range": [
+              40,
+              900
+            ]
+          },
+          "legend": null
+        },
+        "tooltip": [
+          {
+            "field": "country",
+            "title": "Country"
+          },
+          {
+            "field": "products",
+            "title": "Shared products",
+            "format": ","
+          }
+        ]
+      }
+    },
+    {
+      "data": {
+        "url": "data/shared_countries.csv",
+        "format": {
+          "type": "csv",
+          "parse": {
+            "products": "number",
+            "lat": "number",
+            "lon": "number",
+            "label_lon": "number",
+            "label_lat": "number",
+            "aus_lat": "number",
+            "aus_lon": "number"
+          }
+        }
+      },
+      "transform": [
+        {
+          "filter": "datum.country == 'New Zealand'"
+        },
+        {
+          "calculate": "datum.country + ' ' + format(datum.products, ',')",
+          "as": "label"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "dx": 14,
+        "fontSize": 12,
+        "fontWeight": 700,
+        "color": "#1f2937"
+      },
+      "encoding": {
+        "longitude": {
+          "field": "lon",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "lat",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "label",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "t": "Europe"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "baseline": "top",
+        "fontSize": 12,
+        "fontWeight": 700,
+        "color": "#c2410c"
+      },
+      "encoding": {
+        "x": {
+          "value": 0
+        },
+        "y": {
+          "value": 70
+        },
+        "text": {
+          "field": "t",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "t": "France 1,806"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "baseline": "top",
+        "fontSize": 12,
+        "fontWeight": 600,
+        "color": "#1f2937"
+      },
+      "encoding": {
+        "x": {
+          "value": 0
+        },
+        "y": {
+          "value": 86
+        },
+        "text": {
+          "field": "t",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "t": "Germany 1,145"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "baseline": "top",
+        "fontSize": 12,
+        "fontWeight": 600,
+        "color": "#1f2937"
+      },
+      "encoding": {
+        "x": {
+          "value": 0
+        },
+        "y": {
+          "value": 102
+        },
+        "text": {
+          "field": "t",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "t": "United Kingdom 388"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "baseline": "top",
+        "fontSize": 12,
+        "fontWeight": 600,
+        "color": "#1f2937"
+      },
+      "encoding": {
+        "x": {
+          "value": 0
+        },
+        "y": {
+          "value": 118
+        },
+        "text": {
+          "field": "t",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "t": "Switzerland 201"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "baseline": "top",
+        "fontSize": 12,
+        "fontWeight": 600,
+        "color": "#1f2937"
+      },
+      "encoding": {
+        "x": {
+          "value": 0
+        },
+        "y": {
+          "value": 134
+        },
+        "text": {
+          "field": "t",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "t": "North America"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "align": "right",
+        "baseline": "top",
+        "fontSize": 12,
+        "fontWeight": 700,
+        "color": "#c2410c"
+      },
+      "encoding": {
+        "x": {
+          "value": {
+            "expr": "width"
+          }
+        },
+        "y": {
+          "value": 70
+        },
+        "text": {
+          "field": "t",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "t": "United States 445"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "align": "right",
+        "baseline": "top",
+        "fontSize": 12,
+        "fontWeight": 600,
+        "color": "#1f2937"
+      },
+      "encoding": {
+        "x": {
+          "value": {
+            "expr": "width"
+          }
+        },
+        "y": {
+          "value": 86
+        },
+        "text": {
+          "field": "t",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "t": "Canada 216"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "align": "right",
+        "baseline": "top",
+        "fontSize": 12,
+        "fontWeight": 600,
+        "color": "#1f2937"
+      },
+      "encoding": {
+        "x": {
+          "value": {
+            "expr": "width"
+          }
+        },
+        "y": {
+          "value": 102
+        },
+        "text": {
+          "field": "t",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "t": "5,980 of 80,892 Australian products"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "baseline": "top",
+        "fontSize": 13,
+        "fontWeight": 700,
+        "color": "#c2410c"
+      },
+      "encoding": {
+        "x": {
+          "value": 0
+        },
+        "y": {
+          "value": 236
+        },
+        "text": {
+          "field": "t",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "t": "are also listed in another country"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "baseline": "top",
+        "fontSize": 13,
+        "fontWeight": 700,
+        "color": "#c2410c"
+      },
+      "encoding": {
+        "x": {
+          "value": 0
+        },
+        "y": {
+          "value": 253
+        },
+        "text": {
+          "field": "t",
+          "type": "nominal"
+        }
+      }
+    }
+  ],
+  "config": {
+    "font": "'DM Sans', system-ui, sans-serif",
+    "background": null,
+    "view": {
+      "stroke": null
+    },
+    "axis": {
+      "labelLimit": 260,
+      "labelFontSize": 12,
+      "titleFontSize": 13,
+      "titleFontWeight": 600,
+      "labelColor": "#4b5563",
+      "titleColor": "#1f2937",
+      "domainColor": "#9ca3af",
+      "tickColor": "#9ca3af",
+      "gridColor": "#e5e7eb",
+      "titlePadding": 10
+    },
+    "legend": {
+      "labelFontSize": 12,
+      "titleFontSize": 12,
+      "titleFontWeight": 600,
+      "labelColor": "#4b5563",
+      "titleColor": "#1f2937"
+    },
+    "title": {
+      "fontSize": 16,
+      "fontWeight": 700,
+      "anchor": "start",
+      "color": "#1f2937",
+      "subtitleColor": "#4b5563",
+      "subtitleFontSize": 13,
+      "subtitlePadding": 6,
+      "offset": 14
+    },
+    "header": {
+      "labelFontSize": 12,
+      "labelColor": "#1f2937"
+    }
+  }
+}

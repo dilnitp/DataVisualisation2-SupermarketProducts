@@ -1,0 +1,305 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
+  "description": "Binned 2D heatmap: where products sit on sugar and salt per 100 g. Source: Open Food Facts.",
+  "title": {
+    "text": "Most products are low in both sugar and salt",
+    "subtitle": "Darker squares = more products. Dashed lines mark 'high' levels."
+  },
+  "data": {
+    "url": "data/products.csv",
+    "format": {
+      "type": "csv",
+      "parse": {
+        "sugar": "number",
+        "salt": "number",
+        "satfat": "number",
+        "fibre": "number",
+        "protein": "number"
+      }
+    }
+  },
+  "width": "container",
+  "height": 340,
+  "autosize": {
+    "type": "fit",
+    "contains": "padding"
+  },
+  "transform": [
+    {
+      "filter": "isValid(datum.sugar) && isValid(datum.salt) && datum.sugar <= 60 && datum.salt <= 4"
+    }
+  ],
+  "layer": [
+    {
+      "mark": {
+        "type": "rect"
+      },
+      "encoding": {
+        "x": {
+          "field": "sugar",
+          "bin": {
+            "extent": [
+              0,
+              60
+            ],
+            "step": 2
+          },
+          "type": "quantitative",
+          "title": "Sugar (grams per 100 g)",
+          "scale": {
+            "domain": [
+              0,
+              60
+            ],
+            "nice": false
+          }
+        },
+        "y": {
+          "field": "salt",
+          "bin": {
+            "extent": [
+              0,
+              4
+            ],
+            "step": 0.2
+          },
+          "type": "quantitative",
+          "title": "Salt (grams per 100 g)",
+          "scale": {
+            "domain": [
+              0,
+              4
+            ],
+            "nice": false
+          }
+        },
+        "color": {
+          "aggregate": "count",
+          "type": "quantitative",
+          "scale": {
+            "type": "sqrt",
+            "range": [
+              "#fff7ed",
+              "#7c2d12"
+            ]
+          },
+          "legend": {
+            "title": "Products",
+            "orient": "right",
+            "gradientLength": 160
+          }
+        },
+        "tooltip": [
+          {
+            "aggregate": "count",
+            "title": "Products"
+          }
+        ]
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "x": 22.5
+          }
+        ]
+      },
+      "mark": {
+        "type": "rule",
+        "strokeDash": [
+          5,
+          4
+        ],
+        "color": "#1f2937",
+        "strokeWidth": 1.5
+      },
+      "encoding": {
+        "x": {
+          "field": "x",
+          "type": "quantitative"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "y": 1.5
+          }
+        ]
+      },
+      "mark": {
+        "type": "rule",
+        "strokeDash": [
+          5,
+          4
+        ],
+        "color": "#1f2937",
+        "strokeWidth": 1.5
+      },
+      "encoding": {
+        "y": {
+          "field": "y",
+          "type": "quantitative"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "t": "High salt: above the line"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "baseline": "top",
+        "fontSize": 12,
+        "fontWeight": 700,
+        "color": "#1f2937"
+      },
+      "encoding": {
+        "x": {
+          "value": 6
+        },
+        "y": {
+          "value": 14
+        },
+        "text": {
+          "field": "t",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "t": "High sugar: right of the line"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "baseline": "top",
+        "fontSize": 12,
+        "fontWeight": 700,
+        "color": "#1f2937"
+      },
+      "encoding": {
+        "x": {
+          "value": 300
+        },
+        "y": {
+          "value": 14
+        },
+        "text": {
+          "field": "t",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "t": "Most products sit down here:"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "baseline": "top",
+        "fontSize": 13,
+        "fontWeight": 700,
+        "color": "#c2410c"
+      },
+      "encoding": {
+        "x": {
+          "value": 60
+        },
+        "y": {
+          "value": 92
+        },
+        "text": {
+          "field": "t",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "t": "low sugar, low salt \u2199"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "baseline": "top",
+        "fontSize": 13,
+        "fontWeight": 700,
+        "color": "#c2410c"
+      },
+      "encoding": {
+        "x": {
+          "value": 60
+        },
+        "y": {
+          "value": 109
+        },
+        "text": {
+          "field": "t",
+          "type": "nominal"
+        }
+      }
+    }
+  ],
+  "config": {
+    "font": "'DM Sans', system-ui, sans-serif",
+    "background": null,
+    "view": {
+      "stroke": null
+    },
+    "axis": {
+      "labelLimit": 260,
+      "labelFontSize": 12,
+      "titleFontSize": 13,
+      "titleFontWeight": 600,
+      "labelColor": "#4b5563",
+      "titleColor": "#1f2937",
+      "domainColor": "#9ca3af",
+      "tickColor": "#9ca3af",
+      "gridColor": "#e5e7eb",
+      "titlePadding": 10
+    },
+    "legend": {
+      "labelFontSize": 12,
+      "titleFontSize": 12,
+      "titleFontWeight": 600,
+      "labelColor": "#4b5563",
+      "titleColor": "#1f2937"
+    },
+    "title": {
+      "fontSize": 16,
+      "fontWeight": 700,
+      "anchor": "start",
+      "color": "#1f2937",
+      "subtitleColor": "#4b5563",
+      "subtitleFontSize": 13,
+      "subtitlePadding": 6,
+      "offset": 14
+    },
+    "header": {
+      "labelFontSize": 12,
+      "labelColor": "#1f2937"
+    }
+  }
+}

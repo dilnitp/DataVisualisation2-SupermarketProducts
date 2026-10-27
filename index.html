@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Price, Shelf, Plate: packaged food in Australia</title>
+  <meta name="description" content="An interactive visual story about packaged food and drink in Australia: food prices, what is on the shelf, what is on the label, and what ends up on our plates. Built with Vega-Lite.">
+  <meta name="author" content="Dilni Premawardana">
+  <meta name="date" content="2026-10-27">
+  <meta name="keywords" content="supermarket products, nutrition, Nutri-Score, food prices, Australia, data visualisation, Vega-Lite">
+  <meta property="og:title" content="Price, Shelf, Plate: packaged food in Australia">
+  <meta property="og:description" content="Food prices, packaged products and diets across Australia, told in eleven charts and maps.">
+  <meta property="og:type" content="article">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:wght@600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="kicker">FIT3179 Data Visualisation 2 &middot; Topic: Supermarket products</p>
+    <h1>Price, Shelf, Plate</h1>
+    <p class="lead">What packaged food in Australia looks like, from the shop to the plate.</p>
+    <p class="scope">This page covers packaged food and drink only.</p>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- 1. THE SHOP -->
+  <section class="part" id="shop">
+    <div class="part-head">
+      <span class="part-num">1</span>
+      <h2>The shop</h2>
+      <p class="part-line">First, what are we paying?</p>
+    </div>
+
+    <article class="row">
+      <div class="note">
+        <h3>Food prices rose everywhere</h3>
+        <p>Prices rose in every capital city.</p>
+        <p>Hobart rose most, at 3.6%.</p>
+        <p>Canberra rose least, at 2.4%.</p>
+        <p class="small">This shows how fast prices rose. It does not show which city costs more.</p>
+      </div>
+      <figure class="vis"><div id="vis-01" class="chart" aria-label="Map of Australia showing the rise in food prices by capital city"></div></figure>
+    </article>
+  </section>
+
+  <!-- 2. THE SHELF -->
+  <section class="part" id="shelf">
+    <div class="part-head">
+      <span class="part-num">2</span>
+      <h2>The shelf</h2>
+      <p class="part-line">Next, what fills the aisles?</p>
+    </div>
+
+    <article class="row">
+      <div class="note">
+        <h3>Sweet snacks fill the biggest aisle</h3>
+        <p>Tile size shows how many products.</p>
+        <p>Darker tiles score poorly more often.</p>
+        <p>Nearly 9 in 10 sweet snacks score D or E.</p>
+        <p class="small">Nutri-Score runs from A (best) to E (worst). Colour counts only products that have a score.</p>
+      </div>
+      <figure class="vis"><div id="vis-02" class="chart" aria-label="Treemap of product groups by number of products and share scoring D or E"></div></figure>
+    </article>
+
+    <article class="row">
+      <div class="note">
+        <h3>Most scored products are ultra-processed</h3>
+        <p>63 of every 100 are ultra-processed.</p>
+        <p>These are made mostly from industrial ingredients.</p>
+        <p class="small">Only 8,386 products have a processing score.</p>
+      </div>
+      <figure class="vis"><div id="vis-03" class="chart" aria-label="Waffle chart showing processing levels of scored products"></div></figure>
+    </article>
+    <article class="row">
+      <div class="note">
+        <h3>Many products sell overseas too</h3>
+        <p>About 6,000 are also listed in other countries.</p>
+        <p>New Zealand shares the most, then France.</p>
+        <p class="small">Based on all 80,892 Australian products in the database. Contributors choose where a product is sold, so treat this as a guide. Lines show links, not shipping routes.</p>
+      </div>
+      <figure class="vis"><div id="vis-11" class="chart" aria-label="World map linking Australia to the countries where Australian-listed products are also sold"></div></figure>
+    </article>
+  </section>
+
+  <!-- 3. THE LABEL -->
+  <section class="part" id="label">
+    <div class="part-head">
+      <span class="part-num">3</span>
+      <h2>The label</h2>
+      <p class="part-line">Then, what is inside?</p>
+    </div>
+
+    <article class="row">
+      <div class="note">
+        <h3>Where sugar, fat and salt hide</h3>
+        <p>7 in 10 sweet snacks are high in sugar.</p>
+        <p>Sauces and salty snacks carry the salt.</p>
+        <p class="small">&lsquo;High&rsquo; follows UK traffic-light labels. Drinks are left out.</p>
+      </div>
+      <figure class="vis"><div id="vis-04" class="chart" aria-label="Heatmap of the share of products high in sugar, saturated fat and salt by food group"></div></figure>
+    </article>
+
+    <article class="row">
+      <div class="note">
+        <h3>Most products are low in sugar and salt</h3>
+        <p>About 6 in 10 sit in the bottom-left corner.</p>
+        <p class="small">That corner means under 10 g sugar and 1.5 g salt per 100 g. A few products above 60 g sugar or 4 g salt are not shown.</p>
+      </div>
+      <figure class="vis"><div id="vis-05" class="chart" aria-label="Heatmap of products by sugar and salt per 100 grams"></div></figure>
+    </article>
+
+    <article class="row">
+      <div class="note">
+        <h3>Sweet snacks vary widely in sugar</h3>
+        <p>Most other groups bunch near zero.</p>
+        <p>Sweet snacks stretch far to the right.</p>
+        <p class="small">Ridge height is scaled within each group. Products above 60 g sugar are not shown.</p>
+      </div>
+      <figure class="vis"><div id="vis-06" class="chart" aria-label="Ridgeline chart of sugar per 100 grams for each food group"></div></figure>
+    </article>
+
+    <article class="row">
+      <div class="note">
+        <h3>Each group has a nutrient fingerprint</h3>
+        <p>Lines join typical amounts per 100 g.</p>
+        <p>Each axis runs from lowest to highest group.</p>
+        <p class="small">Hover over a line to follow it.</p>
+      </div>
+      <figure class="vis"><div id="vis-07" class="chart" aria-label="Parallel coordinates chart of typical nutrient amounts by food group"></div></figure>
+    </article>
+
+    <article class="row">
+      <div class="note">
+        <h3>Who tops each nutrient?</h3>
+        <p>Sweet snacks rank first for sugar and saturated fat.</p>
+        <p>Sauces and salty snacks tie for salt.</p>
+        <p class="small">Typical means the middle value. Where groups tie, they are listed A to Z.</p>
+      </div>
+      <figure class="vis"><div id="vis-08" class="chart" aria-label="Bump chart of food group ranks for sugar, saturated fat and salt"></div></figure>
+    </article>
+  </section>
+
+  <!-- 4. THE PLATE -->
+  <section class="part" id="plate">
+    <div class="part-head">
+      <span class="part-num">4</span>
+      <h2>The plate</h2>
+      <p class="part-line">Finally, what do we eat?</p>
+    </div>
+
+    <article class="row">
+      <div class="note">
+        <h3>Most adults miss the fruit target</h3>
+        <p>Tasmania has the highest share, at 60%.</p>
+        <p>Victoria has the lowest, at 55%.</p>
+        <p class="small">Adults, 2022, adjusted for age. The daily target depends on age and sex.</p>
+      </div>
+      <figure class="vis"><div id="vis-09" class="chart" aria-label="Map of the share of adults not eating enough fruit by state"></div></figure>
+    </article>
+
+    <article class="row">
+      <div class="note">
+        <h3>Vegetables are missed even more</h3>
+        <p>About 9 in 10 adults fall short.</p>
+        <p>Queensland is worst. Tasmania is best.</p>
+        <p class="small">Adults, 2022, adjusted for age. Each state is drawn the same size.</p>
+      </div>
+      <figure class="vis"><div id="vis-10" class="chart" aria-label="Tile map of the share of adults not eating enough vegetables by state"></div></figure>
+    </article>
+  </section>
+
+  <!-- TAKEAWAY -->
+  <section class="takeaway">
+    <h2>In short</h2>
+    <p>Food prices keep rising.</p>
+    <p>Many packaged products score poorly.</p>
+    <p>Most of us still miss fruit and vegetables.</p>
+  </section>
+
+  <!-- NOTES -->
+  <section class="notes" id="about">
+    <h2>About this page</h2>
+
+    <h3>Data and sources</h3>
+    <ul>
+      <li><strong>Products:</strong> <a href="https://world.openfoodfacts.org/data">Open Food Facts</a>, Australian products, downloaded October 2026. A crowd-sourced database, so it does not list every product. Licence: Open Database Licence (ODbL).</li>
+      <li><strong>World map:</strong> <a href="https://github.com/topojson/world-atlas">world-atlas</a> (Natural Earth, public domain), simplified at 1:110 million.</li>
+      <li><strong>State maps:</strong> Australian Bureau of Statistics, <a href="https://www.abs.gov.au/statistics/standards/australian-statistical-geography-standard-asgs/edition-3-july-2021-june-2026/access-and-downloads/digital-boundary-files">ASGS Edition 3 digital boundary files</a>, States and Territories 2021. Simplified for web use.</li>
+      <li><strong>Diet:</strong> Australian Bureau of Statistics, <a href="https://www.abs.gov.au/statistics/health/food-and-nutrition/dietary-behaviour/latest-release">National Health Survey 2022</a>, Table 2.3 (proportions, adjusted for age).</li>
+      <li><strong>Prices:</strong> Australian Bureau of Statistics, <a href="https://www.abs.gov.au/statistics/economy/price-indexes-and-inflation/consumer-price-index-australia/latest-release#data-downloads">Consumer Price Index, Australia</a>, food and non-alcoholic beverages by capital city. Change is August 2026 compared with August 2025.</li>
+      <li><strong>&lsquo;High&rsquo; levels:</strong> UK traffic-light thresholds per 100 g, from <a href="https://www.gov.scot/publications/supporting-healthy-choices-framework-voluntary-action/pages/13/">Food Standards Scotland guidance</a>: sugar over 22.5 g, saturated fat over 5 g, salt over 1.5 g. These are not Australian rules.</li>
+    </ul>
+
+    <h3>How to read the scores</h3>
+    <ul>
+      <li><strong>Nutri-Score</strong> grades foods from A (best) to E (worst). Open Food Facts calculates it from the nutrition label.</li>
+      <li><strong>Processing level</strong> uses the NOVA groups: 1 minimally processed, 2 processed ingredients, 3 processed, 4 ultra-processed.</li>
+      <li><strong>Typical</strong> means the middle value of the group.</li>
+    </ul>
+
+    <h3>Choices and limits</h3>
+    <ul>
+      <li>14,100 products in nine food and drink groups are shown. Alcohol is left out.</li>
+      <li>Values that are impossible for 100 g (for example, sugar above 100 g) were removed.</li>
+      <li>The price map shows how fast prices rose, not price levels.</li>
+      <li>Survey results are estimates.</li>
+    </ul>
+
+    <h3>Credits</h3>
+    <ul>
+      <li>Author: Dilni Premawardana, Monash University. Published 27 October 2026.</li>
+      <li>Charts are built with <a href="https://vega.github.io/vega-lite/">Vega-Lite</a> and <a href="https://vega.github.io/vega/">Vega</a>. Each chart&rsquo;s JSON is in the <code>specs</code> folder.</li>
+      <li>AI acknowledgement: Claude (Anthropic) helped write the code and draft the page text. The author chose the topic and data and reviewed the results.</li>
+    </ul>
+  </section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <p>Price, Shelf, Plate &middot; FIT3179 Data Visualisation 2 &middot; 2026</p>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/vega@6.4.0"></script>
+<script src="https://cdn.jsdelivr.net/npm/vega-lite@6.5.0"></script>
+<script src="https://cdn.jsdelivr.net/npm/vega-embed@7.3.0"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

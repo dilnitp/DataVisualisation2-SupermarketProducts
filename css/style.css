@@ -1,0 +1,192 @@
+/* Price, shelf, plate: styles
+   Layout rules: one 8px spacing scale, one text column + one chart column,
+   one accent colour for the key message, greys for everything else. */
+
+:root {
+  --ink: #1f2937;
+  --muted: #6b7280;
+  --line: #e5e7eb;
+  --paper: #fafaf9;
+  --accent: #c2410c;
+  --dark: #111827;
+  --gap: 48px;
+  --font: "DM Sans", system-ui, "Segoe UI", Arial, sans-serif;
+  --font-head: "Fraunces", Georgia, "Times New Roman", serif;
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  font-family: var(--font);
+  color: var(--ink);
+  background: var(--paper);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+.wrap {
+  width: 100%;
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ---------- Hero ---------- */
+.hero {
+  background: #301934;
+  color: #ffffff;
+  padding: 72px 0 64px;
+}
+.kicker {
+  margin: 0 0 16px;
+  font-size: 14px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #fdba74;
+  font-weight: 600;
+}
+.hero h1 {
+  margin: 0 0 16px;
+  font-size: 64px;
+  line-height: 1.05;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+.lead {
+  margin: 0 0 16px;
+  max-width: 28ch;
+  font-size: 24px;
+  line-height: 1.35;
+  color: #e5e7eb;
+}
+.scope {
+  margin: 0;
+  display: inline-block;
+  padding: 8px 16px;
+  border: 1px solid #4b5563;
+  border-radius: 999px;
+  font-size: 15px;
+  color: #d1d5db;
+}
+
+/* ---------- Parts ---------- */
+.part { padding-top: 72px; }
+
+.part-head {
+  display: grid;
+  grid-template-columns: 64px 1fr;
+  column-gap: 16px;
+  align-items: baseline;
+  padding-bottom: 24px;
+}
+.part-num {
+  grid-row: 1 / span 2;
+  font-size: 56px;
+  line-height: 1;
+  font-weight: 800;
+  color: var(--accent);
+}
+.part-head h2 {
+  margin: 0;
+  font-size: 36px;
+  line-height: 1.1;
+  font-weight: 800;
+  color: #301934;
+}
+.part-line {
+  margin: 8px 0 0;
+  font-size: 18px;
+  color: var(--muted);
+}
+
+/* ---------- Rows: text column + chart column ---------- */
+.row {
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr);
+  column-gap: var(--gap);
+  align-items: start;
+  padding: 40px 0;
+  border-top: 1px solid var(--line);
+}
+
+.note h3 {
+  margin: 0 0 16px;
+  max-width: 18ch;
+  font-size: 24px;
+  line-height: 1.2;
+  font-weight: 800;
+  color: #301934;
+}
+.note p {
+  margin: 0 0 8px;
+  max-width: 30ch;
+  font-size: 18px;
+  line-height: 1.45;
+  color: var(--ink);
+}
+.note p.small {
+  margin-top: 16px;
+  max-width: 34ch;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.vis { margin: 0; min-width: 0; overflow-x: auto; }
+.chart { width: 100%; min-height: 280px; }
+.chart .vega-embed { display: block; width: 100%; }
+.chart svg { max-width: 100%; height: auto; }
+.error { color: var(--accent); font-weight: 600; }
+
+/* ---------- Takeaway ---------- */
+.takeaway {
+  margin-top: 72px;
+  padding: 48px 0;
+  border-top: 4px solid var(--accent);
+}
+.takeaway h2 {
+  margin: 0 0 24px;
+  font-size: 36px;
+  font-weight: 800;
+  color: #301934;
+}
+.takeaway p {
+  margin: 0 0 8px;
+  font-size: 28px;
+  line-height: 1.3;
+  font-weight: 700;
+  max-width: 30ch;
+  color: var(--ink);
+}
+.takeaway p:last-child { color: var(--accent); }
+
+/* ---------- Notes ---------- */
+.notes {
+  padding: 48px 0 72px;
+  border-top: 1px solid var(--line);
+  font-size: 15px;
+  color: #374151;
+}
+.notes h2 { margin: 0 0 24px; font-size: 28px; color: #301934; }
+.notes h3 { margin: 32px 0 8px; font-size: 17px; color: #301934; }
+.notes ul { margin: 0; padding-left: 20px; max-width: 70ch; }
+.notes li { margin-bottom: 8px; }
+.notes a { color: #1d4ed8; }
+.notes code { background: #f3f4f6; padding: 1px 6px; border-radius: 4px; }
+
+.foot { background: #301934; color: #9ca3af; padding: 24px 0; font-size: 14px; }
+.foot p { margin: 0; }
+
+/* ---------- Small screens ---------- */
+@media (max-width: 900px) {
+  .hero h1 { font-size: 48px; }
+  .row { grid-template-columns: minmax(0, 1fr); row-gap: 24px; }
+  .note h3, .note p, .note p.small { max-width: 40ch; }
+}
+
+.hero h1, .part-head h2, .part-num, .note h3, .takeaway h2, .big, .notes h2 {
+  font-family: var(--font-head);
+}

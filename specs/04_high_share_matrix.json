@@ -1,0 +1,335 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
+  "description": "Matrix heatmap: share of products in each food group that are 'high' in sugar, saturated fat or salt per 100 g (UK traffic-light thresholds). Source: Open Food Facts.",
+  "title": {
+    "text": "How many products are 'high' in each nutrient?",
+    "subtitle": "'High' = over 22.5 g sugar, 5 g saturated fat or 1.5 g salt per 100 g"
+  },
+  "data": {
+    "url": "data/products.csv",
+    "format": {
+      "type": "csv",
+      "parse": {
+        "sugar": "number",
+        "salt": "number",
+        "satfat": "number"
+      }
+    }
+  },
+  "width": 300,
+  "height": 300,
+  "padding": {
+    "left": 5,
+    "right": 190,
+    "top": 5,
+    "bottom": 5
+  },
+  "transform": [
+    {
+      "filter": "datum.category != 'Drinks'"
+    },
+    {
+      "fold": [
+        "sugar",
+        "satfat",
+        "salt"
+      ],
+      "as": [
+        "nutrient",
+        "value"
+      ]
+    },
+    {
+      "filter": "isValid(datum.value)"
+    },
+    {
+      "calculate": "datum.nutrient == 'sugar' ? (datum.value > 22.5 ? 1 : 0) : datum.nutrient == 'salt' ? (datum.value > 1.5 ? 1 : 0) : (datum.value > 5 ? 1 : 0)",
+      "as": "high"
+    },
+    {
+      "aggregate": [
+        {
+          "op": "mean",
+          "field": "high",
+          "as": "share"
+        },
+        {
+          "op": "count",
+          "as": "n"
+        }
+      ],
+      "groupby": [
+        "category",
+        "nutrient"
+      ]
+    },
+    {
+      "calculate": "datum.nutrient == 'sugar' ? 'Sugar' : datum.nutrient == 'satfat' ? 'Saturated fat' : 'Salt'",
+      "as": "nutrient_label"
+    }
+  ],
+  "layer": [
+    {
+      "mark": {
+        "type": "rect",
+        "stroke": "#ffffff",
+        "strokeWidth": 2
+      },
+      "encoding": {
+        "x": {
+          "field": "nutrient_label",
+          "type": "ordinal",
+          "sort": [
+            "Sugar",
+            "Saturated fat",
+            "Salt"
+          ],
+          "axis": {
+            "orient": "top",
+            "title": null,
+            "labelAngle": 0,
+            "labelFontWeight": 600,
+            "ticks": false,
+            "domain": false
+          }
+        },
+        "y": {
+          "field": "category",
+          "type": "nominal",
+          "sort": [
+            "Sweet snacks",
+            "Fruit and veg",
+            "Oils and sauces",
+            "Milk and dairy",
+            "Cereals and potatoes",
+            "Salty snacks",
+            "Ready meals",
+            "Meat, fish, eggs"
+          ],
+          "axis": {
+            "title": null,
+            "ticks": false,
+            "domain": false,
+            "labelFontSize": 13,
+            "labelLimit": 200
+          }
+        },
+        "color": {
+          "field": "share",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              0,
+              0.8
+            ],
+            "range": [
+              "#fff7ed",
+              "#9a3412"
+            ],
+            "clamp": true
+          },
+          "legend": null
+        },
+        "tooltip": [
+          {
+            "field": "category",
+            "title": "Food group"
+          },
+          {
+            "field": "nutrient_label",
+            "title": "Nutrient"
+          },
+          {
+            "field": "share",
+            "title": "Share high",
+            "format": ".0%"
+          },
+          {
+            "field": "n",
+            "title": "Products checked"
+          }
+        ]
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "fontSize": 13,
+        "fontWeight": 600
+      },
+      "encoding": {
+        "x": {
+          "field": "nutrient_label",
+          "type": "ordinal",
+          "sort": [
+            "Sugar",
+            "Saturated fat",
+            "Salt"
+          ]
+        },
+        "y": {
+          "field": "category",
+          "type": "nominal",
+          "sort": [
+            "Sweet snacks",
+            "Fruit and veg",
+            "Oils and sauces",
+            "Milk and dairy",
+            "Cereals and potatoes",
+            "Salty snacks",
+            "Ready meals",
+            "Meat, fish, eggs"
+          ]
+        },
+        "text": {
+          "field": "share",
+          "type": "quantitative",
+          "format": ".0%"
+        },
+        "color": {
+          "condition": {
+            "test": "datum.share > 0.35",
+            "value": "#ffffff"
+          },
+          "value": "#1f2937"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "nutrient_label": "Salt",
+            "category": "Sweet snacks",
+            "t": "7 in 10 sweet snacks"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "dx": 62,
+        "dy": -8,
+        "fontSize": 13,
+        "fontWeight": 700,
+        "color": "#c2410c"
+      },
+      "encoding": {
+        "x": {
+          "field": "nutrient_label",
+          "type": "ordinal",
+          "sort": [
+            "Sugar",
+            "Saturated fat",
+            "Salt"
+          ]
+        },
+        "y": {
+          "field": "category",
+          "type": "nominal",
+          "sort": [
+            "Sweet snacks",
+            "Fruit and veg",
+            "Oils and sauces",
+            "Milk and dairy",
+            "Cereals and potatoes",
+            "Salty snacks",
+            "Ready meals",
+            "Meat, fish, eggs"
+          ]
+        },
+        "text": {
+          "field": "t"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "nutrient_label": "Salt",
+            "category": "Sweet snacks",
+            "t": "are high in sugar"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "dx": 62,
+        "dy": 8,
+        "fontSize": 13,
+        "fontWeight": 700,
+        "color": "#c2410c"
+      },
+      "encoding": {
+        "x": {
+          "field": "nutrient_label",
+          "type": "ordinal",
+          "sort": [
+            "Sugar",
+            "Saturated fat",
+            "Salt"
+          ]
+        },
+        "y": {
+          "field": "category",
+          "type": "nominal",
+          "sort": [
+            "Sweet snacks",
+            "Fruit and veg",
+            "Oils and sauces",
+            "Milk and dairy",
+            "Cereals and potatoes",
+            "Salty snacks",
+            "Ready meals",
+            "Meat, fish, eggs"
+          ]
+        },
+        "text": {
+          "field": "t"
+        }
+      }
+    }
+  ],
+  "config": {
+    "font": "'DM Sans', system-ui, sans-serif",
+    "background": null,
+    "view": {
+      "stroke": null
+    },
+    "axis": {
+      "labelLimit": 260,
+      "labelFontSize": 12,
+      "titleFontSize": 13,
+      "titleFontWeight": 600,
+      "labelColor": "#4b5563",
+      "titleColor": "#1f2937",
+      "domainColor": "#9ca3af",
+      "tickColor": "#9ca3af",
+      "gridColor": "#e5e7eb",
+      "titlePadding": 10
+    },
+    "legend": {
+      "labelFontSize": 12,
+      "titleFontSize": 12,
+      "titleFontWeight": 600,
+      "labelColor": "#4b5563",
+      "titleColor": "#1f2937"
+    },
+    "title": {
+      "fontSize": 16,
+      "fontWeight": 700,
+      "anchor": "start",
+      "color": "#1f2937",
+      "subtitleColor": "#4b5563",
+      "subtitleFontSize": 13,
+      "subtitlePadding": 6,
+      "offset": 14
+    },
+    "header": {
+      "labelFontSize": 12,
+      "labelColor": "#1f2937"
+    }
+  }
+}

@@ -1,0 +1,286 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
+  "description": "Bump chart: how eight food groups rank on typical sugar, saturated fat and salt per 100 g (1 = highest). Source: Open Food Facts.",
+  "title": {
+    "text": "Sweet snacks top sugar and saturated fat",
+    "subtitle": "Rank by typical amount per 100 g. 1 = highest."
+  },
+  "data": {
+    "url": "data/products.csv",
+    "format": {
+      "type": "csv",
+      "parse": {
+        "sugar": "number",
+        "salt": "number",
+        "satfat": "number",
+        "fibre": "number",
+        "protein": "number"
+      }
+    }
+  },
+  "width": 420,
+  "height": 330,
+  "padding": {
+    "left": 10,
+    "right": 150,
+    "top": 5,
+    "bottom": 5
+  },
+  "transform": [
+    {
+      "filter": "datum.category != 'Drinks'"
+    },
+    {
+      "aggregate": [
+        {
+          "op": "median",
+          "field": "sugar",
+          "as": "Sugar"
+        },
+        {
+          "op": "median",
+          "field": "satfat",
+          "as": "Saturated fat"
+        },
+        {
+          "op": "median",
+          "field": "salt",
+          "as": "Salt"
+        }
+      ],
+      "groupby": [
+        "category"
+      ]
+    },
+    {
+      "fold": [
+        "Sugar",
+        "Saturated fat",
+        "Salt"
+      ],
+      "as": [
+        "nutrient",
+        "value"
+      ]
+    },
+    {
+      "window": [
+        {
+          "op": "row_number",
+          "as": "rank"
+        }
+      ],
+      "sort": [
+        {
+          "field": "value",
+          "order": "descending"
+        },
+        {
+          "field": "category",
+          "order": "ascending"
+        }
+      ],
+      "groupby": [
+        "nutrient"
+      ]
+    }
+  ],
+  "encoding": {
+    "x": {
+      "field": "nutrient",
+      "type": "ordinal",
+      "sort": [
+        "Sugar",
+        "Saturated fat",
+        "Salt"
+      ],
+      "axis": {
+        "title": null,
+        "orient": "top",
+        "labelAngle": 0,
+        "labelFontWeight": 700,
+        "labelFontSize": 13,
+        "ticks": false,
+        "domain": false,
+        "labelPadding": 10
+      },
+      "scale": {
+        "padding": 0.15
+      }
+    },
+    "y": {
+      "field": "rank",
+      "type": "quantitative",
+      "scale": {
+        "reverse": true,
+        "domain": [
+          0.6,
+          8.4
+        ]
+      },
+      "axis": {
+        "title": "Rank (1 = highest typical amount)",
+        "values": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8
+        ],
+        "grid": false,
+        "domain": false
+      }
+    },
+    "detail": {
+      "field": "category",
+      "type": "nominal"
+    }
+  },
+  "layer": [
+    {
+      "mark": {
+        "type": "line",
+        "strokeCap": "round",
+        "interpolate": "monotone"
+      },
+      "encoding": {
+        "color": {
+          "condition": [
+            {
+              "test": "datum.category == 'Sweet snacks'",
+              "value": "#c2410c"
+            },
+            {
+              "test": "datum.category == 'Salty snacks'",
+              "value": "#1d4ed8"
+            }
+          ],
+          "value": "#c3ccd9"
+        },
+        "strokeWidth": {
+          "condition": {
+            "test": "datum.category == 'Sweet snacks' || datum.category == 'Salty snacks'",
+            "value": 5
+          },
+          "value": 2.5
+        },
+        "tooltip": [
+          {
+            "field": "category",
+            "title": "Food group"
+          },
+          {
+            "field": "nutrient",
+            "title": "Nutrient"
+          },
+          {
+            "field": "rank",
+            "title": "Rank"
+          },
+          {
+            "field": "value",
+            "title": "Typical amount (g per 100 g)",
+            "format": ".1f"
+          }
+        ]
+      }
+    },
+    {
+      "mark": {
+        "type": "circle",
+        "size": 150,
+        "opacity": 1
+      },
+      "encoding": {
+        "color": {
+          "condition": [
+            {
+              "test": "datum.category == 'Sweet snacks'",
+              "value": "#c2410c"
+            },
+            {
+              "test": "datum.category == 'Salty snacks'",
+              "value": "#1d4ed8"
+            }
+          ],
+          "value": "#9aa6b8"
+        }
+      }
+    },
+    {
+      "transform": [
+        {
+          "filter": "datum.nutrient == 'Salt'"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "dx": 12,
+        "fontSize": 13,
+        "fontWeight": 600
+      },
+      "encoding": {
+        "text": {
+          "field": "category"
+        },
+        "color": {
+          "condition": [
+            {
+              "test": "datum.category == 'Sweet snacks'",
+              "value": "#c2410c"
+            },
+            {
+              "test": "datum.category == 'Salty snacks'",
+              "value": "#1d4ed8"
+            }
+          ],
+          "value": "#1f2937"
+        }
+      }
+    }
+  ],
+  "config": {
+    "font": "'DM Sans', system-ui, sans-serif",
+    "background": null,
+    "view": {
+      "stroke": null
+    },
+    "axis": {
+      "labelLimit": 260,
+      "labelFontSize": 12,
+      "titleFontSize": 13,
+      "titleFontWeight": 600,
+      "labelColor": "#4b5563",
+      "titleColor": "#1f2937",
+      "domainColor": "#9ca3af",
+      "tickColor": "#9ca3af",
+      "gridColor": "#e5e7eb",
+      "titlePadding": 10
+    },
+    "legend": {
+      "labelFontSize": 12,
+      "titleFontSize": 12,
+      "titleFontWeight": 600,
+      "labelColor": "#4b5563",
+      "titleColor": "#1f2937"
+    },
+    "title": {
+      "fontSize": 16,
+      "fontWeight": 700,
+      "anchor": "start",
+      "color": "#1f2937",
+      "subtitleColor": "#4b5563",
+      "subtitleFontSize": 13,
+      "subtitlePadding": 6,
+      "offset": 14
+    },
+    "header": {
+      "labelFontSize": 12,
+      "labelColor": "#1f2937"
+    }
+  }
+}

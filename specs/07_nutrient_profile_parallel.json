@@ -1,0 +1,469 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
+  "description": "Parallel coordinates: typical (median) amount of five nutrients per 100 g for each food group, each axis scaled from lowest to highest group. Source: Open Food Facts.",
+  "title": {
+    "text": "Every food group has its own nutrient fingerprint",
+    "subtitle": "Typical amount per 100 g. Sat fat = saturated fat."
+  },
+  "data": {
+    "url": "data/products.csv",
+    "format": {
+      "type": "csv",
+      "parse": {
+        "sugar": "number",
+        "salt": "number",
+        "satfat": "number",
+        "fibre": "number",
+        "protein": "number"
+      }
+    }
+  },
+  "width": "container",
+  "height": 360,
+  "autosize": {
+    "type": "fit",
+    "contains": "padding"
+  },
+  "padding": {
+    "left": 10,
+    "right": 130,
+    "top": 20,
+    "bottom": 24
+  },
+  "transform": [
+    {
+      "aggregate": [
+        {
+          "op": "median",
+          "field": "sugar",
+          "as": "Sugar"
+        },
+        {
+          "op": "median",
+          "field": "satfat",
+          "as": "Sat fat"
+        },
+        {
+          "op": "median",
+          "field": "salt",
+          "as": "Salt"
+        },
+        {
+          "op": "median",
+          "field": "fibre",
+          "as": "Fibre"
+        },
+        {
+          "op": "median",
+          "field": "protein",
+          "as": "Protein"
+        }
+      ],
+      "groupby": [
+        "category"
+      ]
+    },
+    {
+      "fold": [
+        "Sugar",
+        "Sat fat",
+        "Salt",
+        "Fibre",
+        "Protein"
+      ],
+      "as": [
+        "nutrient",
+        "value"
+      ]
+    },
+    {
+      "window": [
+        {
+          "op": "min",
+          "field": "value",
+          "as": "lo"
+        },
+        {
+          "op": "max",
+          "field": "value",
+          "as": "hi"
+        }
+      ],
+      "groupby": [
+        "nutrient"
+      ],
+      "frame": [
+        null,
+        null
+      ]
+    },
+    {
+      "calculate": "(datum.value - datum.lo) / (datum.hi - datum.lo)",
+      "as": "scaled"
+    }
+  ],
+  "layer": [
+    {
+      "transform": [
+        {
+          "filter": "datum.scaled == 1"
+        },
+        {
+          "calculate": "0",
+          "as": "y0"
+        },
+        {
+          "calculate": "1",
+          "as": "y1"
+        }
+      ],
+      "mark": {
+        "type": "rule",
+        "color": "#cbd5e1",
+        "strokeWidth": 2
+      },
+      "encoding": {
+        "x": {
+          "field": "nutrient",
+          "type": "ordinal",
+          "sort": [
+            "Sugar",
+            "Sat fat",
+            "Salt",
+            "Fibre",
+            "Protein"
+          ],
+          "scale": {
+            "padding": 0.45
+          },
+          "axis": {
+            "title": null,
+            "orient": "top",
+            "labelAngle": 0,
+            "labelFontWeight": 700,
+            "labelFontSize": 12,
+            "ticks": false,
+            "domain": false,
+            "labelPadding": 24
+          }
+        },
+        "y": {
+          "field": "y0",
+          "type": "quantitative",
+          "axis": null
+        },
+        "y2": {
+          "field": "y1"
+        }
+      }
+    },
+    {
+      "params": [
+        {
+          "name": "hl",
+          "select": {
+            "type": "point",
+            "fields": [
+              "category"
+            ],
+            "on": "pointerover",
+            "clear": "pointerout"
+          }
+        }
+      ],
+      "mark": {
+        "type": "line",
+        "interpolate": "linear",
+        "strokeCap": "round"
+      },
+      "encoding": {
+        "x": {
+          "field": "nutrient",
+          "type": "ordinal",
+          "sort": [
+            "Sugar",
+            "Sat fat",
+            "Salt",
+            "Fibre",
+            "Protein"
+          ],
+          "scale": {
+            "padding": 0.45
+          }
+        },
+        "y": {
+          "field": "scaled",
+          "type": "quantitative",
+          "axis": null,
+          "scale": {
+            "domain": [
+              0,
+              1
+            ]
+          }
+        },
+        "detail": {
+          "field": "category",
+          "type": "nominal"
+        },
+        "color": {
+          "condition": [
+            {
+              "test": "datum.category == 'Sweet snacks'",
+              "value": "#c2410c"
+            },
+            {
+              "test": "datum.category == 'Salty snacks'",
+              "value": "#1d4ed8"
+            },
+            {
+              "param": "hl",
+              "empty": false,
+              "value": "#0f172a"
+            }
+          ],
+          "value": "#a8b3c4"
+        },
+        "strokeWidth": {
+          "condition": [
+            {
+              "test": "indexof(['Sweet snacks','Salty snacks'], datum.category) >= 0",
+              "value": 4
+            },
+            {
+              "param": "hl",
+              "empty": false,
+              "value": 3.5
+            }
+          ],
+          "value": 1.8
+        },
+        "tooltip": [
+          {
+            "field": "category",
+            "title": "Food group"
+          },
+          {
+            "field": "nutrient",
+            "title": "Nutrient"
+          },
+          {
+            "field": "value",
+            "title": "Typical amount (g per 100 g)",
+            "format": ".1f"
+          }
+        ]
+      }
+    },
+    {
+      "mark": {
+        "type": "point",
+        "filled": true,
+        "size": 50
+      },
+      "encoding": {
+        "x": {
+          "field": "nutrient",
+          "type": "ordinal",
+          "sort": [
+            "Sugar",
+            "Sat fat",
+            "Salt",
+            "Fibre",
+            "Protein"
+          ],
+          "scale": {
+            "padding": 0.45
+          }
+        },
+        "y": {
+          "field": "scaled",
+          "type": "quantitative",
+          "axis": null
+        },
+        "color": {
+          "condition": [
+            {
+              "test": "datum.category == 'Sweet snacks'",
+              "value": "#c2410c"
+            },
+            {
+              "test": "datum.category == 'Salty snacks'",
+              "value": "#1d4ed8"
+            }
+          ],
+          "value": "#a8b3c4"
+        }
+      }
+    },
+    {
+      "transform": [
+        {
+          "filter": "datum.nutrient == 'Protein' && indexof(['Sweet snacks','Salty snacks','Meat, fish, eggs'], datum.category) >= 0"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "dx": 10,
+        "fontSize": 13,
+        "fontWeight": 700
+      },
+      "encoding": {
+        "x": {
+          "field": "nutrient",
+          "type": "ordinal",
+          "sort": [
+            "Sugar",
+            "Sat fat",
+            "Salt",
+            "Fibre",
+            "Protein"
+          ],
+          "scale": {
+            "padding": 0.45
+          }
+        },
+        "y": {
+          "field": "scaled",
+          "type": "quantitative",
+          "axis": null
+        },
+        "text": {
+          "field": "category"
+        },
+        "color": {
+          "condition": [
+            {
+              "test": "datum.category == 'Sweet snacks'",
+              "value": "#c2410c"
+            },
+            {
+              "test": "datum.category == 'Salty snacks'",
+              "value": "#1d4ed8"
+            }
+          ],
+          "value": "#1f2937"
+        }
+      }
+    },
+    {
+      "transform": [
+        {
+          "filter": "datum.scaled == 1"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "dy": -9,
+        "fontSize": 11,
+        "color": "#4b5563"
+      },
+      "encoding": {
+        "x": {
+          "field": "nutrient",
+          "type": "ordinal",
+          "sort": [
+            "Sugar",
+            "Sat fat",
+            "Salt",
+            "Fibre",
+            "Protein"
+          ],
+          "scale": {
+            "padding": 0.45
+          }
+        },
+        "y": {
+          "field": "scaled",
+          "type": "quantitative",
+          "axis": null
+        },
+        "text": {
+          "field": "value",
+          "type": "quantitative",
+          "format": ".2~f"
+        }
+      }
+    },
+    {
+      "transform": [
+        {
+          "filter": "datum.scaled == 0"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "dy": 14,
+        "fontSize": 11,
+        "color": "#4b5563"
+      },
+      "encoding": {
+        "x": {
+          "field": "nutrient",
+          "type": "ordinal",
+          "sort": [
+            "Sugar",
+            "Sat fat",
+            "Salt",
+            "Fibre",
+            "Protein"
+          ],
+          "scale": {
+            "padding": 0.45
+          }
+        },
+        "y": {
+          "field": "scaled",
+          "type": "quantitative",
+          "axis": null
+        },
+        "text": {
+          "field": "value",
+          "type": "quantitative",
+          "format": ".2~f"
+        }
+      }
+    }
+  ],
+  "config": {
+    "font": "'DM Sans', system-ui, sans-serif",
+    "background": null,
+    "view": {
+      "stroke": null
+    },
+    "axis": {
+      "labelLimit": 260,
+      "labelFontSize": 12,
+      "titleFontSize": 13,
+      "titleFontWeight": 600,
+      "labelColor": "#4b5563",
+      "titleColor": "#1f2937",
+      "domainColor": "#9ca3af",
+      "tickColor": "#9ca3af",
+      "gridColor": "#e5e7eb",
+      "titlePadding": 10
+    },
+    "legend": {
+      "labelFontSize": 12,
+      "titleFontSize": 12,
+      "titleFontWeight": 600,
+      "labelColor": "#4b5563",
+      "titleColor": "#1f2937"
+    },
+    "title": {
+      "fontSize": 16,
+      "fontWeight": 700,
+      "anchor": "start",
+      "color": "#1f2937",
+      "subtitleColor": "#4b5563",
+      "subtitleFontSize": 13,
+      "subtitlePadding": 6,
+      "offset": 14
+    },
+    "header": {
+      "labelFontSize": 12,
+      "labelColor": "#1f2937"
+    }
+  }
+}
