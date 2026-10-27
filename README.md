@@ -55,22 +55,6 @@ Built with Vega-Lite (and one Vega treemap). No build step is needed.
 "High" levels in chart 4 are the UK traffic-light thresholds per 100 g (sugar over 22.5 g,
 saturated fat over 5 g, salt over 1.5 g), from Food Standards Scotland guidance. They are not Australian rules.
 
-## Run it locally
-
-Browsers block `fetch` from `file://`, so serve the folder:
-
-```
-python -m http.server 8000
-```
-
-Then open http://localhost:8000
-
-## Publish on GitHub Pages
-
-1. Create a public repository and upload everything in this folder (plus `sketch.pdf`).
-2. Settings, Pages, Source: "Deploy from a branch", branch `main`, folder `/ (root)`.
-3. Open `https://<your-username>.github.io/<repo-name>/` after a minute or two.
-
 ## AI acknowledgement
 
 Claude (Anthropic) helped write the code and draft the page text. The author chose the topic and data and reviewed the results.
